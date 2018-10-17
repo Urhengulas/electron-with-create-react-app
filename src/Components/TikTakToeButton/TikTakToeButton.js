@@ -5,7 +5,7 @@ class TikTakToeButton extends React.Component {
         super(props);
         this.state = {
             clicked: false,
-            player: 0
+            player: 0,
         }
     };
     handleClick = () => {

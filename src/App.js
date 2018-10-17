@@ -11,59 +11,61 @@ class App extends Component {
         super(props);
         this.state = {
             turn: 1,
+            round: 0,
             field: [[0,0,0],
                     [0,0,0],
-                    [0,0,0]]
+                    [0,0,0]],
+            won: false,
         };
         this.changeTurn = this.changeTurn.bind(this);
         this.changeField = this.changeField.bind(this);
         this.checkField = this.checkField.bind(this);
     }
     checkField() {
-        console.log("checkField")
+        console.log("checkField");
+
         let f = this.state.field;
-        let finished = false;
         let i = 1;
         for(; i <= 2; i++) {
             //horizontal
             if (f[0][0] === i && f[0][1] === i && f[0][2] === i) {
-                finished = true;
+                this.setState({won: true});
                 break;
             }
             else if (f[1][0] === i && f[1][1] === i && f[1][2] === i) {
-                finished = true;
+                this.setState({won: true});
                 break;
             }
             else if (f[2][0] === i && f[2][1] === i && f[2][2] === i) {
-                finished = true;
+                this.setState({won: true});
                 break;
             }
             //vertical
             else if (f[0][0] === i && f[1][0] === i && f[2][0] === i) {
-                finished = true;
+                this.setState({won: true});
                 break;
             }
             else if (f[0][1] === i && f[1][1] === i && f[2][1] === i) {
-                finished = true;
+                this.setState({won: true});
                 break;
             }
             else if (f[0][2] === i && f[1][2] === i && f[2][2] === i) {
-                finished = true;
+                this.setState({won: true});
                 break;
             }
             //diagonal
             else if (f[0][0] === i && f[1][1] === i && f[2][2] === i) {
-                finished = true;
+                this.setState({won: true});
                 break;
             }
             else if (f[0][2] === i && f[1][1] === i && f[2][0] === i) {
-                finished = true;
+                this.setState({won: true});
                 break;
             }
         }
 
-        if(finished === true) {
-            alert("Player " + i + " won");
+        if(this.state.round === 9) {
+            this.setState({ won: -1});
         }
     }
     changeTurn() {
@@ -85,7 +87,7 @@ class App extends Component {
         }
 
         field2[row][column] = this.state.turn;
-        this.setState({field: field2});
+        this.setState({field: field2, round: this.state.round += 1});
         this.checkField();
 
         //print Field
@@ -96,34 +98,59 @@ class App extends Component {
     }
 
     render() {
-        return (
-            <div className="App">
-                <div className="App-header">
-                    <img src={logo} className="App-logo" alt="logo"/>
-                    <h2>Hello to a round of TikTakToe</h2>
+        if(this.state.won === false) {
+            return (
+                <div className="App">
+                    <div className="App-header">
+                        <img src={logo} className="App-logo" alt="logo"/>
+                        <h2>Welcome to a round of TikTakToe</h2>
+                    </div>
+                    <p className="App-intro">
+                        Let us play! <br/>
+                    </p>
+                    <div className="column">
+                        <div className="row">
+                            <TikTakToeButton id={1} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn} field={this.state.field}/>
+                            <TikTakToeButton id={2} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn} field={this.state.field}/>
+                            <TikTakToeButton id={3} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn} field={this.state.field}/>
+                        </div>
+                        <div className="row">
+                            <TikTakToeButton id={4} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn} field={this.state.field}/>
+                            <TikTakToeButton id={5} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn} field={this.state.field}/>
+                            <TikTakToeButton id={6} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn} field={this.state.field}/>
+                        </div>
+                        <div className="row">
+                            <TikTakToeButton id={7} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn} field={this.state.field}/>
+                            <TikTakToeButton id={8} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn} field={this.state.field}/>
+                            <TikTakToeButton id={9} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn} field={this.state.field}/>
+                        </div>
+                    </div>
                 </div>
-                <p className="App-intro">
-                    Let us play! <br/>
-                </p>
-                <div className="column">
-                    <div className="row">
-                        <TikTakToeButton id={1} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn}/>
-                        <TikTakToeButton id={2} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn}/>
-                        <TikTakToeButton id={3} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn}/>
+            );
+        }
+        else if(this.state.won === true) {
+            return (
+                <div className="App">
+                    <div className="App-header">
+                        <img src={logo} className="App-logo" alt="logo"/>
+                        <h2>Suuuuuuuuuper!</h2>
                     </div>
-                    <div className="row">
-                        <TikTakToeButton id={4} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn}/>
-                        <TikTakToeButton id={5} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn}/>
-                        <TikTakToeButton id={6} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn}/>
-                    </div>
-                    <div className="row">
-                        <TikTakToeButton id={7} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn}/>
-                        <TikTakToeButton id={8} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn}/>
-                        <TikTakToeButton id={9} changeTurn={this.changeTurn} changeField={this.changeField} player={this.state.turn}/>
-                    </div>
+                    <h2>{"Player " + (this.state.turn === 1 ? 2 : 1) + " won"}</h2>
                 </div>
-            </div>
-        );
+            );
+        }
+        else if(this.state.won === -1) {
+            return (
+                <div className="App">
+                    <div className="App-header">
+                        <img src={logo} className="App-logo" alt="logo"/>
+                        <h2>Ohhhhhhhh D:</h2>
+                    </div>
+                    <h2>{"It's a draw"}</h2>
+                </div>
+            );
+        }
+
     }
 }
 
